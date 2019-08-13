@@ -1,31 +1,37 @@
-var wins = 0;
-var losses = 0;
-var dog1 = 0;
-var dog2 = 0;
-var dog3 = 0;
-var dog4 = 0;
-var targetScore = 0;
-var currentScore = 0;
+var widowPower = 30;
+var hawkeyePower = 20;
+var capPower = 50;
+var ironPower = 40;
+var widowHealth = 200;
+var hawkeyeHealth = 150;
+var capHealth = 500;
+var ironHealth = 400;
 
-function generateTargetScore() {
-    targetScore = Math.floor(Math.random() * 120);
-    console.log(targetScore);
-}
+// so apparently the actual code has an 'image builder' function that just...creates the whole image on the fly. like, the border, the padding, the text above and below the image, all of it is made and placed in the div using the function right then.
+// presumably, that function needs, like, the text that goes above and below the image, the border color and crap, the padding, the path to the image, and the div to append it to??
+// I have no idea how to update fucking ANYTHING after that??????
 
-function dogValues() {
-    dog1 = Math.ceil(Math.random() * 12);
-    dog2 = Math.ceil(Math.random() * 12);
-    dog3 = Math.ceil(Math.random() * 12);
-    dog4 = Math.ceil(Math.random() * 12);
-    console.log(dog1+" "+dog2+" "+dog3+" "+dog4);
-}
+// $("#widow-health").append(widowHealth);
 
-$("#dog1").on("click", function(){
-    console.log("dog1 was clicked!");
-    currentScore = currentScore+dog1;
-    console.log(currentScore);
-});
+// $(".characters").click(function(e) {
+//     var target = $(e.target);
 
-generateTargetScore();
-
-dogValues();
+//     if(target.is("#black-widow")){
+//         $("#black-widow").animate({
+//             top: "+=250px"
+//         });
+//         widowPower = 10;
+//     }
+//     else if(target.is("#cap")){
+//         console.log("You have selected Captain America!");
+//         capPower = 10;
+//     }
+//     else if(target.is("#iron-man")){
+//         console.log("You have selected Iron Man!");
+//         ironPower = 10;
+//     }
+//     else if(target.is("#hawkeye")){
+//         console.log("You have selected Hawkeye!");
+//         hawkeyePower = 10;
+//     }
+// })
