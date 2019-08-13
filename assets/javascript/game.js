@@ -72,8 +72,12 @@ $(".character-selection").click(function(e) {
     
     var target = $(e.target);
 
+    console.log(target);
+
     // which means that for some reason, this just doesn't work now. given that it worked when I had the images set in the html, I think it must be something to do with the fact that I added the images with a function this time, but I have no fucking idea what to do about that, because Austin said that the way they did it in the actual solved code involved a builder function that set up the images and text and all literally as they became required.
     // okay. yeah. tried it. for some reason it's just...not registering clicks on these ids. I don't fucking get it.
+    // the target variable definitely contains the ids I'm trying to target? ????????
+    // confusion. much confusion. help. I suffer.
     if(target.is("#black-widow-img")){
         console.log("You have selected Black Widow!");
     }
