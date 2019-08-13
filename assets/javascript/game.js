@@ -34,9 +34,9 @@ var imgHeight = 101;
 // movie references make me happy.
 
 imageBuilder(".character-selection", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
-imageBuilder(".character-selection", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
 imageBuilder(".character-selection", "#cap-img", "assets/images/cap.jpg", "Captain America", capHealth)
 imageBuilder(".character-selection", "#iron-img", "assets/images/iron-man.jpg", "Iron Man", ironHealth)
+imageBuilder(".character-selection", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
 
 function imageBuilder(target, imgId, path, name, health) {
     var span = $("<span/>");
@@ -60,7 +60,6 @@ function imageBuilder(target, imgId, path, name, health) {
     $(span2).append(health);
 }
 
-// this doesn't work anymore. I don't know why. it worked before, when the images were set up in the html. and the ids are definitely attached to the images correctly. but clicking on them does nothing.
 $(".character-selection").click(function(e) {
     
     // it's definitely making it to here.
@@ -79,20 +78,28 @@ $(".character-selection").click(function(e) {
         console.log("You have selected Black Widow!");
         widowPower = 10;
         currentAttack = widowPower;
+        $(".character-selection").empty();
+        imageBuilder(".player-character", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
     }
     else if(id=="#cap-img"){
         console.log("You have selected Captain America!");
         capPower = 10;
         currentAttack = capPower;
+        $(".character-selection").empty();
+        imageBuilder(".player-character", "#cap-img", "assets/images/cap.jpg", "Captain America", capHealth)
     }
     else if(id=="#iron-img"){
         console.log("You have selected Iron Man!");
         ironPower = 10;
         currentAttack = ironPower;
+        $(".character-selection").empty();
+        imageBuilder(".player-character", "#iron-img", "assets/images/iron-man.jpg", "Iron Man", ironHealth)
     }
     else if(id=="#hawkeye-img"){
         console.log("You have selected Hawkeye!");
         hawkeyePower = 10;
         currentAttack = hawkeyePower;
+        $(".character-selection").empty();
+        imageBuilder(".player-character", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
     }
 });
