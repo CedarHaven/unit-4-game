@@ -2,8 +2,13 @@ var widowPower = 30;
 var hawkeyePower = 20;
 var capPower = 50;
 var ironPower = 40;
-var widowHealth = 200;
-var hawkeyeHealth = 150;
+
+// this is for keeping track of your current attack power, and it's the variable that will be incremented with the power of the character you're playing, which will be assigned the base attack power and keep the base attack power.
+var currentAttack = 0;
+
+// these health stats are maybe a little unfair with Cap and Iron Man. the reason for this is that Iron Man has armor and Cap's a super soldier, they probably would have ridiculous health stats in a game.
+var widowHealth = 250;
+var hawkeyeHealth = 200;
 var capHealth = 500;
 var ironHealth = 400;
 
@@ -14,28 +19,19 @@ var imgHeight = 101;
 // presumably, that function needs, like, the text that goes above and below the image, the border color and crap, the padding, the path to the image, and the div to append it to??
 // I have no idea how to update fucking ANYTHING after that??????
 
-// $(".characters").click(function(e) {
-//     var target = $(e.target);
-
-//     if(target.is("#black-widow")){
-//         $("#black-widow").animate({
-//             top: "+=250px"
-//         });
-//         widowPower = 10;
-//     }
-//     else if(target.is("#cap")){
-//         console.log("You have selected Captain America!");
-//         capPower = 10;
-//     }
-//     else if(target.is("#iron-man")){
-//         console.log("You have selected Iron Man!");
-//         ironPower = 10;
-//     }
-//     else if(target.is("#hawkeye")){
-//         console.log("You have selected Hawkeye!");
-//         hawkeyePower = 10;
-//     }
-// })
+// things to do:
+// on click of character, they are now your player character. update where this character appears to be in the 'your character' div, and move all the others to an enemy div.
+// on click of character in enemy div, move them to 'the one you're actively fighting'--the defender div.
+// on click of attack button, your character attacks the defender character. they lose health, your attack power increments (+10, unless I change the player attack power), and the defender's health is updated.
+// after your power increments, the defender auto-attacks back.
+// have a checker for if your health is less than or equal to 0 or if the defender's health is less than or equal to 0
+// if the defender's health is less than or equal to 0, you win, and may then select a new enemy
+// if your health is less than or equal to 0, you lose.
+// this one says nothing about auto replay, so I'm going to say that if you lose, you have to reload the page to try again, and if you successfully beat all three enemies, you have to reload the page to play again.
+// subsequently, I will not be keeping track of wins and losses.
+// I know that the game wants me to give all the characters different attack power. but I think that's stupid, because that inherently means there's going to be a stronger character with whom you're inherently more likely to win as long as you aren't really dumb about it, and the instructions also say that "the challenge should come from picking the right enemies, not choosing the strongest player." which to me implies there shouldn't BE a strongest player.
+// in other words: I acknowledge that I've been given a direction but given that it's a stupid-ass direction, I've elected to ignore it.
+// movie references make me happy.
 
 imageBuilder(".character-selection", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
 imageBuilder(".character-selection", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
@@ -64,30 +60,39 @@ function imageBuilder(target, imgId, path, name, health) {
     $(span2).append(health);
 }
 
-// this doesn't work anymore. I don't know why. it worked before. and the ids are definitely attached to the images correctly. but clicking on them does nothing.
+// this doesn't work anymore. I don't know why. it worked before, when the images were set up in the html. and the ids are definitely attached to the images correctly. but clicking on them does nothing.
 $(".character-selection").click(function(e) {
     
     // it's definitely making it to here.
     console.log("click!");
     
-    var target = $(e.target);
+    var id = e.target.id;
 
-    console.log(target);
+    // the target variable definitely contains the ids I'm trying to target, so...
+    console.log(id);
 
     // which means that for some reason, this just doesn't work now. given that it worked when I had the images set in the html, I think it must be something to do with the fact that I added the images with a function this time, but I have no fucking idea what to do about that, because Austin said that the way they did it in the actual solved code involved a builder function that set up the images and text and all literally as they became required.
     // okay. yeah. tried it. for some reason it's just...not registering clicks on these ids. I don't fucking get it.
-    // the target variable definitely contains the ids I'm trying to target? ????????
     // confusion. much confusion. help. I suffer.
-    if(target.is("#black-widow-img")){
+    // OKAY I changed it from target.is("#id") to this, and now it works. why???? I DON'T KNOW. but I'm just going to ROLL WITH IT.
+    if(id=="#black-widow-img"){
         console.log("You have selected Black Widow!");
+        widowPower = 10;
+        currentAttack = widowPower;
     }
-    else if(target.is("#cap-img")){
+    else if(id=="#cap-img"){
         console.log("You have selected Captain America!");
+        capPower = 10;
+        currentAttack = capPower;
     }
-    else if(target.is("#iron-img")){
+    else if(id=="#iron-img"){
         console.log("You have selected Iron Man!");
+        ironPower = 10;
+        currentAttack = ironPower;
     }
-    else if(target.is("#hawkeye-img")){
+    else if(id=="#hawkeye-img"){
         console.log("You have selected Hawkeye!");
+        hawkeyePower = 10;
+        currentAttack = hawkeyePower;
     }
 });
