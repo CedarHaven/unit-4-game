@@ -1,9 +1,4 @@
 // this is an array of all the character objects.
-// I know the instructions say 'give them all a different attack power.'
-// but that seems very stupid to me, because it also says "there should be a way to win and lose with each character, it shouldn't just be about picking the strongest one!"
-// ...and if one character has a base attack of 10 and another has 15, you're inherently more likely to win with the second one.
-// which means that it is, then, just about picking the strongest character.
-// basically: I recognize I was given a direction, but the direction was unclear to me and seems stupid, so I'm not doing that.
 var characters = [ 
     {name: "Hawkeye",
     health: 200,
@@ -286,3 +281,4 @@ $("button").click(function(){
 // make reset button appear when you win or lose
 // make a click of reset button call the createCharacter() function
 // reset wins to 0 somewhere in createCharacter or the reset button press or something
+// get some cool fonts and a nice background. and maybe stylize the buttons a little.
