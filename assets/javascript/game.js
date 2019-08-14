@@ -33,6 +33,11 @@ var imgHeight = 101;
 // in other words: I acknowledge that I've been given a direction but given that it's a stupid-ass direction, I've elected to ignore it.
 // movie references make me happy.
 
+// current thoughts:
+// give the overall span for the images and text a class for background color, so that way once the player picks who they're playing as, the remaining characters can be given a span class of 'enemy-character' or something so I can change the background colors, like in the game demo.
+// there has to be a way to center text in a span.
+// there has to be a better way to handle health updates that doesn't involve having to rebuild the image every single time. maybe attach an id to the span containing the health information, and then have a thing that will update that for the active enemy and the player character?
+
 imageBuilder(".character-selection", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
 imageBuilder(".character-selection", "#cap-img", "assets/images/cap.jpg", "Captain America", capHealth)
 imageBuilder(".character-selection", "#iron-img", "assets/images/iron-man.jpg", "Iron Man", ironHealth)
@@ -43,7 +48,7 @@ function imageBuilder(target, imgId, path, name, health) {
     $(span).addClass("border-class");
     $(target).append(span);
 
-    // without the divs, I can't figure out how to get the text to sit above and below the image like in the thing. but with the divs, the images don't line up next to each other.
+    // the spans are the only way I could figure out to get the text to go above and below the image. it's not centered, though.
     var span1 = $("<span/>");
     $(span1).addClass("name-text")
     $(span).prepend(span1);
