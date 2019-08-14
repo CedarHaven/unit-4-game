@@ -1,110 +1,288 @@
-var widowPower = 30;
-var hawkeyePower = 20;
-var capPower = 50;
-var ironPower = 40;
+// this is an array of all the character objects.
+// I know the instructions say 'give them all a different attack power.'
+// but that seems very stupid to me, because it also says "there should be a way to win and lose with each character, it shouldn't just be about picking the strongest one!"
+// ...and if one character has a base attack of 10 and another has 15, you're inherently more likely to win with the second one.
+// which means that it is, then, just about picking the strongest character.
+// basically: I recognize I was given a direction, but the direction was unclear to me and seems stupid, so I'm not doing that.
+var characters = [ 
+    {name: "Hawkeye",
+    health: 200,
+    playerAttack: 10,
+    imgPath: "assets/images/hawkeye.jpg",
+    enemyAttack: 30},
 
-// this is for keeping track of your current attack power, and it's the variable that will be incremented with the power of the character you're playing, which will be assigned the base attack power and keep the base attack power.
-var currentAttack = 0;
+    {name: "Black Widow",
+    health: 250,
+    playerAttack: 10,
+    imgPath: "assets/images/black-widow.jpg",
+    enemyAttack: 20},
 
-// these health stats are maybe a little unfair with Cap and Iron Man. the reason for this is that Iron Man has armor and Cap's a super soldier, they probably would have ridiculous health stats in a game.
-var widowHealth = 250;
-var hawkeyeHealth = 200;
-var capHealth = 500;
-var ironHealth = 400;
+    {name: "Captain America",
+    health: 500,
+    playerAttack: 10,
+    imgPath: "assets/images/cap.jpg",
+    enemyAttack: 40},
 
-var imgWidth = 180;
-var imgHeight = 101;
+    {name: "Iron Man",
+    health: 400,
+    playerAttack: 10,
+    imgPath: "assets/images/iron-man.jpg",
+    enemyAttack: 50}
+]
 
-// so apparently the actual code has an 'image builder' function that just...creates the whole image on the fly. like, the border, the padding, the text above and below the image, all of it is made and placed in the div using the function right then.
-// presumably, that function needs, like, the text that goes above and below the image, the border color and crap, the padding, the path to the image, and the div to append it to??
-// I have no idea how to update fucking ANYTHING after that??????
+// here is the array for the enemy characters, the object for the player character, and the object for the defender character.
+// I also included a tracker of how many battles you've won, and when it hits 3, you win the game and are told you've won.
+// defender is to check if you've already picked an enemy to fight, so that you can't keep picking enemies over and over, and also so you can't attack while there's no active enemy.
+// youLive is to check if you're still alive, so that you can't attack after you die and lose the game.
+var enemyChars = [];
+var playerChar = {};
+var defenderChar = {};
+var win = 0;
+var defender = false;
+var youLive = true;
 
-// things to do:
-// on click of character, they are now your player character. update where this character appears to be in the 'your character' div, and move all the others to an enemy div.
-// on click of character in enemy div, move them to 'the one you're actively fighting'--the defender div.
-// on click of attack button, your character attacks the defender character. they lose health, your attack power increments (+10, unless I change the player attack power), and the defender's health is updated.
-// after your power increments, the defender auto-attacks back.
-// have a checker for if your health is less than or equal to 0 or if the defender's health is less than or equal to 0
-// if the defender's health is less than or equal to 0, you win, and may then select a new enemy
-// if your health is less than or equal to 0, you lose.
-// this one says nothing about auto replay, so I'm going to say that if you lose, you have to reload the page to try again, and if you successfully beat all three enemies, you have to reload the page to play again.
-// subsequently, I will not be keeping track of wins and losses.
-// I know that the game wants me to give all the characters different attack power. but I think that's stupid, because that inherently means there's going to be a stronger character with whom you're inherently more likely to win as long as you aren't really dumb about it, and the instructions also say that "the challenge should come from picking the right enemies, not choosing the strongest player." which to me implies there shouldn't BE a strongest player.
-// in other words: I acknowledge that I've been given a direction but given that it's a stupid-ass direction, I've elected to ignore it.
-// movie references make me happy.
+createCharacter();
 
-// current thoughts:
-// give the overall span for the images and text a class for background color, so that way once the player picks who they're playing as, the remaining characters can be given a span class of 'enemy-character' or something so I can change the background colors, like in the game demo.
-// there has to be a way to center text in a span.
-// there has to be a better way to handle health updates that doesn't involve having to rebuild the image every single time. maybe attach an id to the span containing the health information, and then have a thing that will update that for the active enemy and the player character?
+function createCharacter() {
+    for(var i = 0; i < characters.length; i++) {
+        var charName = $("<div/>");
+        var charImage = $("<img src = "+characters[i].imgPath+">");
+        var charHealth = $("<div/>");
+        charName.text(characters[i].name);
+        charHealth.text(characters[i].health);
 
-imageBuilder(".character-selection", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
-imageBuilder(".character-selection", "#cap-img", "assets/images/cap.jpg", "Captain America", capHealth)
-imageBuilder(".character-selection", "#iron-img", "assets/images/iron-man.jpg", "Iron Man", ironHealth)
-imageBuilder(".character-selection", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
-
-function imageBuilder(target, imgId, path, name, health) {
-    var span = $("<span/>");
-    $(span).addClass("border-class");
-    $(target).append(span);
-
-    // the spans are the only way I could figure out to get the text to go above and below the image. it's not centered, though.
-    var span1 = $("<span/>");
-    $(span1).addClass("name-text")
-    $(span).prepend(span1);
-    $(span1).append(name);
-
-    var img = $("<img>");
-    img.attr("id", imgId);
-    img.attr("src", path);
-    img.appendTo(span);
-
-    var span2 = $("<span/>");
-    $(span2).addClass("health-text")
-    $(span).append(span2);
-    $(span2).append(health);
+        // I had to do the data-name attribute stuff like this all the way through, because otherwise, any name other than Hawkeye's would only take the first part of the name. so you'd get stuff like data-name = "Captain", which...did not work.
+        var charCard = $(`<div class = 'char-card' data-name = "${characters[i].name}">`);
+        $(charCard).append(charName);
+        $(charCard).append(charImage);
+        $(charCard).append(charHealth);
+        $(".character-selection").append(charCard);
+    }
 }
 
-$(".character-selection").click(function(e) {
-    
-    // it's definitely making it to here.
-    console.log("click!");
-    
-    var id = e.target.id;
+function appendEnemy() {
+    for(var i = 0; i < enemyChars.length; i++){
+        var charName = $("<div/>");
+        var charImage = $("<img src = "+enemyChars[i].imgPath+">");
+        var charHealth = $("<div/>");
+        charName.text(enemyChars[i].name);
+        charHealth.text(enemyChars[i].health);
 
-    // the target variable definitely contains the ids I'm trying to target, so...
-    console.log(id);
+        // I added the id to enemy character cards because I couldn't figure out how to remove them when they're selected as defenders without the id, and they do need to be removed from the enemy selection area when you choose them as a defender. I also removed the space from the name, because otherwise I couldn't select the id for things like "Black Widow".
+        var id = enemyChars[i].name;
+        id = id.replace(/\s/g, '');
+        var charCard = $(`<div class = 'enemy-card' data-name = "${enemyChars[i].name}">`);
+        charCard.attr("id", id);
+        $(charCard).append(charName);
+        $(charCard).append(charImage);
+        $(charCard).append(charHealth);
+        $(".enemy-characters").append(charCard);
+    }
+}
 
-    // which means that for some reason, this just doesn't work now. given that it worked when I had the images set in the html, I think it must be something to do with the fact that I added the images with a function this time, but I have no fucking idea what to do about that, because Austin said that the way they did it in the actual solved code involved a builder function that set up the images and text and all literally as they became required.
-    // okay. yeah. tried it. for some reason it's just...not registering clicks on these ids. I don't fucking get it.
-    // confusion. much confusion. help. I suffer.
-    // OKAY I changed it from target.is("#id") to this, and now it works. why???? I DON'T KNOW. but I'm just going to ROLL WITH IT.
-    if(id=="#black-widow-img"){
-        console.log("You have selected Black Widow!");
-        widowPower = 10;
-        currentAttack = widowPower;
-        $(".character-selection").empty();
-        imageBuilder(".player-character", "#black-widow-img", "assets/images/black-widow.jpg", "Black Widow", widowHealth)
-    }
-    else if(id=="#cap-img"){
-        console.log("You have selected Captain America!");
-        capPower = 10;
-        currentAttack = capPower;
-        $(".character-selection").empty();
-        imageBuilder(".player-character", "#cap-img", "assets/images/cap.jpg", "Captain America", capHealth)
-    }
-    else if(id=="#iron-img"){
-        console.log("You have selected Iron Man!");
-        ironPower = 10;
-        currentAttack = ironPower;
-        $(".character-selection").empty();
-        imageBuilder(".player-character", "#iron-img", "assets/images/iron-man.jpg", "Iron Man", ironHealth)
-    }
-    else if(id=="#hawkeye-img"){
+function appendPlayer(){
+    var charName = $("<div/>");
+    var charImage = $("<img src = "+playerChar.imgPath+">");
+    var charHealth = $("<div class = 'player-health'/>");
+    charName.text(playerChar.name);
+    charHealth.text(playerChar.health);
+    var charCard = $(`<div class = 'player-card' data-name = "${playerChar.name}">`);
+    $(charCard).append(charName);
+    $(charCard).append(charImage);
+    $(charCard).append(charHealth);
+    $(".player-character").append(charCard);
+}
+
+function appendDefender(){
+    var charName = $("<div/>");
+    var charImage = $("<img src = "+defenderChar.imgPath+">");
+    var charHealth = $("<div class = 'defender-health'/>");
+    charName.text(defenderChar.name);
+    charHealth.text(defenderChar.health);
+    var charCard = $(`<div class = 'defender-card' data-name = "${defenderChar.name}">`);
+    $(charCard).append(charName);
+    $(charCard).append(charImage);
+    $(charCard).append(charHealth);
+    $(".current-enemy").append(charCard);
+}
+
+function defHealthUpdate() {
+    $(".defender-health").html(defenderChar.health);
+}
+
+function playerHealthUpdate() {
+    $(".player-health").html(playerChar.health);
+}
+
+$(".character-selection").on("click", ".char-card", function(e) {
+    
+    // this goes looking for the customized data-name attribute of what you clicked on.
+    var charSelect = $(this).attr("data-name");
+
+    // this is the charSelect thing. it determines who you've chosen as your player, empties the selection div, sets your player charater object, sets your current attack power (which will later be incremented by playerAttack), sets the array of enemy characters, and then appends the enemy characters to the appropriate div and the player character to the appropriate div.
+    if(charSelect === "Hawkeye") {
         console.log("You have selected Hawkeye!");
-        hawkeyePower = 10;
-        currentAttack = hawkeyePower;
         $(".character-selection").empty();
-        imageBuilder(".player-character", "#hawkeye-img", "assets/images/hawkeye.jpg", "Hawkeye", hawkeyeHealth)
+
+        for(var i = 0; i < characters.length; i++){
+            if(characters[i].name != "Hawkeye"){
+                enemyChars.push(characters[i]);
+            }
+            else{
+                playerChar = characters[i];
+            }
+        }
+
+        appendPlayer();
+        appendEnemy();
+    }
+    else if(charSelect === "Black Widow") {
+        console.log("You have selected Black Widow!");
+        $(".character-selection").empty();
+
+        for(var i = 0; i < characters.length; i++){
+            if(characters[i].name != "Black Widow"){
+                enemyChars.push(characters[i]);
+            }
+            else{
+                playerChar = characters[i];
+            }
+        }
+
+        currentAttack = playerChar.playerAttack;
+        appendPlayer();
+        appendEnemy();
+    }
+    else if(charSelect === "Captain America") {
+        console.log("You have selected Captain America!");
+        $(".character-selection").empty();
+
+        for(var i = 0; i < characters.length; i++){
+            if(characters[i].name != "Captain America"){
+                enemyChars.push(characters[i]);
+            }
+            else{
+                playerChar = characters[i];
+            }
+        }
+
+        appendPlayer();
+        appendEnemy();
+    }
+    else if(charSelect === "Iron Man") {
+        console.log("You have selected Iron Man!");
+        $(".character-selection").empty();
+
+        for(var i = 0; i < characters.length; i++){
+            if(characters[i].name != "Iron Man"){
+                enemyChars.push(characters[i]);
+            }
+            else{
+                playerChar = characters[i];
+            }
+        }
+
+        appendPlayer();
+        appendEnemy();
     }
 });
+
+$(".enemy-characters").on("click", ".enemy-card", function(e) {
+    if(!defender) {
+        var defSelect = $(this).attr("data-name");
+        console.log(defSelect);
+
+        if(defSelect === "Hawkeye") {
+            console.log("You have chosen to fight Hawkeye!");
+
+            for(var i = 0; i < enemyChars.length; i++) {
+                if(enemyChars[i].name === "Hawkeye") {
+                    defenderChar = enemyChars[i];
+                    defender = true;
+                }
+            }
+
+            $("#Hawkeye").remove();
+            appendDefender();
+        }
+        else if(defSelect === "Black Widow") {
+            console.log("You have chosen to fight Black Widow!");
+
+            for(var i = 0; i < enemyChars.length; i++) {
+                if(enemyChars[i].name === "Black Widow") {
+                    defenderChar = enemyChars[i];
+                    defender = true;
+                }
+            }
+
+            $("#BlackWidow").remove();
+            appendDefender();
+        }
+        else if(defSelect === "Captain America") {
+            console.log("You have chosen to fight Captain America!");
+
+            for(var i = 0; i < enemyChars.length; i++) {
+                if(enemyChars[i].name === "Captain America") {
+                    defenderChar = enemyChars[i];
+                    defender = true;
+                }
+            }
+
+            $("#CaptainAmerica").remove();
+            appendDefender();
+        }
+        else if(defSelect === "Iron Man") {
+            console.log("You have chosen to fight Iron Man!");
+
+            for(var i = 0; i < enemyChars.length; i++) {
+                if(enemyChars[i].name === "Iron Man") {
+                    defenderChar = enemyChars[i];
+                    defender = true;
+                }
+            }
+
+            $("#IronMan").remove();
+            appendDefender();
+        }
+    }
+});
+
+$("button").click(function(){
+    if(defender && youLive){
+        // you always attack first.
+        defenderChar.health = defenderChar.health-playerChar.playerAttack;
+        defHealthUpdate();
+
+        // if your enemy isn' dead, they go next.
+        if(defenderChar.health > 0) {
+            playerChar.health = playerChar.health-defenderChar.enemyAttack;
+            playerHealthUpdate();
+
+            // given that these sentences show up at the exact same time in the demo, I felt okay about putting them here, because it only goes if you and your enemy are able to attack. if they can't attack, they're dead, and you get told you won the fight.
+            $(".attacks").html("You attacked "+defenderChar.name+" for "+playerChar.playerAttack+" damage.<br>"+defenderChar.name+" attacked you for "+defenderChar.enemyAttack+" damage.");
+            playerChar.playerAttack = playerChar.playerAttack+10;
+        }
+
+        // if you're now dead as a result of enemy attack, you are informed you have lost.
+        if(playerChar.health <= 0) {
+            $(".attacks").html("You have been defeated.<br>Game Over.");
+            youLive = false;
+
+        }
+        else if(defenderChar.health <= 0) {
+            $(".defender-card").remove();
+            $(".attacks").html("You have defeated "+defenderChar.name+"! You may now select another enemy to fight.");
+            defender = false;
+            win++;
+        }
+    }
+
+    if(win==3) {
+        $(".attacks").html("You have won!");
+    }
+});
+
+// things to do now:
+// make reset button appear when you win or lose
+// make a click of reset button call the createCharacter() function
+// reset wins to 0 somewhere in createCharacter or the reset button press or something
