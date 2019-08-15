@@ -133,11 +133,11 @@ function appendDefender(){
 }
 
 function defHealthUpdate() {
-    $("#defender-health").html(enemyHealth);
+    $("#defender-health").text(enemyHealth);
 }
 
 function playerHealthUpdate() {
-    $("#player-health").html(yourHealth);
+    $("#player-health").text(yourHealth);
 }
 
 $("#character-selection").on("click", ".char-card", function(e) {
@@ -283,6 +283,7 @@ $("#attack-button").click(function(){
             playerHealthUpdate();
 
             // given that these sentences show up at the exact same time in the demo, I felt okay about putting them here, because it only goes if you and your enemy are able to attack. if they can't attack, they're dead, and you get told you won the fight.
+            // also I used .html so I could include the line break.
             $("#attacks").html("You attacked "+defenderChar.name+" for "+yourAttack+" damage.<br>"+defenderChar.name+" attacked you for "+defenderChar.enemyAttack+" damage.");
             
             // I'm going to be real, I incremented by playerAttack so I could feel like the variable was doing SOMETHING instead of just sitting uselessly.
@@ -291,13 +292,14 @@ $("#attack-button").click(function(){
 
         // if you're now dead as a result of enemy attack, you are informed you have lost.
         if(yourHealth <= 0) {
+            // again, .html for line break.
             $("#attacks").html("You have been defeated.<br>Game Over.");
             youLive = false;
             $("#reset").append(resetButton);
         }
         else if(enemyHealth <= 0) {
             $("#defender-card").remove();
-            $("#attacks").html("You have defeated "+defenderChar.name+"! You may now select another enemy to fight.");
+            $("#attacks").text("You have defeated "+defenderChar.name+"! You may now select another enemy to fight.");
             defender = false;
             win++;
         }
