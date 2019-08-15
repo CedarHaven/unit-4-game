@@ -1,40 +1,61 @@
 // this is an array of all the character objects.
+// the only reason playerAttack is in here is because the instructions said every character should have a separate enemy attack, player attack, and health variable. at least, I assume they meant "separate variables", because otherwise that instruction would be in direct conflict with the instruction of "it shouldn't be about picking the strongest character", because....different player attack variables...inherently means....there is a strongest character...who is more likely to win.
+// basically, if they meant "all the characters should have different player attack numbers", then I recognize I was given a direction, but given that it's a stupid direction, I have elected to ignore it. /approximate movie quotes yay.
 var characters = [ 
     {name: "Hawkeye",
-    health: 200,
+    health: 350,
     playerAttack: 10,
     imgPath: "assets/images/hawkeye.jpg",
     enemyAttack: 30},
 
     {name: "Black Widow",
-    health: 250,
+    health: 370,
     playerAttack: 10,
     imgPath: "assets/images/black-widow.jpg",
     enemyAttack: 20},
 
     {name: "Captain America",
-    health: 500,
+    health: 410,
     playerAttack: 10,
     imgPath: "assets/images/cap.jpg",
-    enemyAttack: 40},
+    enemyAttack: 35},
 
     {name: "Iron Man",
-    health: 400,
+    health: 390,
     playerAttack: 10,
     imgPath: "assets/images/iron-man.jpg",
-    enemyAttack: 50}
+    enemyAttack: 40}
 ]
 
 // here is the array for the enemy characters, the object for the player character, and the object for the defender character.
-// I also included a tracker of how many battles you've won, and when it hits 3, you win the game and are told you've won.
+// I also included a tracker of how many battles you've won in a playthrough, and when it hits 3, you win the game and are told you've won.
 // defender is to check if you've already picked an enemy to fight, so that you can't keep picking enemies over and over, and also so you can't attack while there's no active enemy.
 // youLive is to check if you're still alive, so that you can't attack after you die and lose the game.
+// yourAttack, yourHealth, and enemyHealth exist to make my life easier so that I don't have to reset like eight object variables every time the restart button is used. yourAttack is default set to 10 because that's what the base player attack is.
+// then there's the reset button, so that I'm not making it twice for when you win or lose. on a click, the button goes away, variables that need resetting are reset, and createCharacter is called anew.
 var enemyChars = [];
 var playerChar = {};
 var defenderChar = {};
 var win = 0;
 var defender = false;
 var youLive = true;
+var yourAttack = 10;
+var yourHealth = 0;
+var enemyHealth = 0;
+var resetButton = $("<button/>", {
+    text: "Reset",
+    id: "reset-button",
+    click:function() {
+        $(".reset").empty();
+        $(".player-character").empty();
+        win = 0;
+        yourAttack = 10;
+        yourHealth = 0;
+        enemyHealth = 0;
+        enemyChars = [];
+        createCharacter();
+    }
+});
 
 createCharacter();
 
@@ -102,11 +123,11 @@ function appendDefender(){
 }
 
 function defHealthUpdate() {
-    $(".defender-health").html(defenderChar.health);
+    $(".defender-health").html(enemyHealth);
 }
 
 function playerHealthUpdate() {
-    $(".player-health").html(playerChar.health);
+    $(".player-health").html(yourHealth);
 }
 
 $(".character-selection").on("click", ".char-card", function(e) {
@@ -114,9 +135,8 @@ $(".character-selection").on("click", ".char-card", function(e) {
     // this goes looking for the customized data-name attribute of what you clicked on.
     var charSelect = $(this).attr("data-name");
 
-    // this is the charSelect thing. it determines who you've chosen as your player, empties the selection div, sets your player charater object, sets your current attack power (which will later be incremented by playerAttack), sets the array of enemy characters, and then appends the enemy characters to the appropriate div and the player character to the appropriate div.
+    // this is the charSelect thing. it determines who you've chosen as your player, empties the selection div, sets your player charater object, sets your current health, sets the array of enemy characters, and then appends the enemy characters to the appropriate div and the player character to the appropriate div.
     if(charSelect === "Hawkeye") {
-        console.log("You have selected Hawkeye!");
         $(".character-selection").empty();
 
         for(var i = 0; i < characters.length; i++){
@@ -128,11 +148,11 @@ $(".character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
     }
     else if(charSelect === "Black Widow") {
-        console.log("You have selected Black Widow!");
         $(".character-selection").empty();
 
         for(var i = 0; i < characters.length; i++){
@@ -144,12 +164,11 @@ $(".character-selection").on("click", ".char-card", function(e) {
             }
         }
 
-        currentAttack = playerChar.playerAttack;
+        yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
     }
     else if(charSelect === "Captain America") {
-        console.log("You have selected Captain America!");
         $(".character-selection").empty();
 
         for(var i = 0; i < characters.length; i++){
@@ -161,11 +180,11 @@ $(".character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
     }
     else if(charSelect === "Iron Man") {
-        console.log("You have selected Iron Man!");
         $(".character-selection").empty();
 
         for(var i = 0; i < characters.length; i++){
@@ -177,6 +196,7 @@ $(".character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
     }
@@ -185,10 +205,8 @@ $(".character-selection").on("click", ".char-card", function(e) {
 $(".enemy-characters").on("click", ".enemy-card", function(e) {
     if(!defender) {
         var defSelect = $(this).attr("data-name");
-        console.log(defSelect);
 
         if(defSelect === "Hawkeye") {
-            console.log("You have chosen to fight Hawkeye!");
 
             for(var i = 0; i < enemyChars.length; i++) {
                 if(enemyChars[i].name === "Hawkeye") {
@@ -201,7 +219,6 @@ $(".enemy-characters").on("click", ".enemy-card", function(e) {
             appendDefender();
         }
         else if(defSelect === "Black Widow") {
-            console.log("You have chosen to fight Black Widow!");
 
             for(var i = 0; i < enemyChars.length; i++) {
                 if(enemyChars[i].name === "Black Widow") {
@@ -214,7 +231,6 @@ $(".enemy-characters").on("click", ".enemy-card", function(e) {
             appendDefender();
         }
         else if(defSelect === "Captain America") {
-            console.log("You have chosen to fight Captain America!");
 
             for(var i = 0; i < enemyChars.length; i++) {
                 if(enemyChars[i].name === "Captain America") {
@@ -227,7 +243,6 @@ $(".enemy-characters").on("click", ".enemy-card", function(e) {
             appendDefender();
         }
         else if(defSelect === "Iron Man") {
-            console.log("You have chosen to fight Iron Man!");
 
             for(var i = 0; i < enemyChars.length; i++) {
                 if(enemyChars[i].name === "Iron Man") {
@@ -242,29 +257,33 @@ $(".enemy-characters").on("click", ".enemy-card", function(e) {
     }
 });
 
-$("button").click(function(){
+$("#attack-button").click(function(){
     if(defender && youLive){
+        enemyHealth = defenderChar.health;
+
         // you always attack first.
-        defenderChar.health = defenderChar.health-playerChar.playerAttack;
+        enemyHealth = enemyHealth-yourAttack;
         defHealthUpdate();
 
         // if your enemy isn' dead, they go next.
-        if(defenderChar.health > 0) {
-            playerChar.health = playerChar.health-defenderChar.enemyAttack;
+        if(enemyHealth > 0) {
+            yourHealth = yourHealth-defenderChar.enemyAttack;
             playerHealthUpdate();
 
             // given that these sentences show up at the exact same time in the demo, I felt okay about putting them here, because it only goes if you and your enemy are able to attack. if they can't attack, they're dead, and you get told you won the fight.
-            $(".attacks").html("You attacked "+defenderChar.name+" for "+playerChar.playerAttack+" damage.<br>"+defenderChar.name+" attacked you for "+defenderChar.enemyAttack+" damage.");
-            playerChar.playerAttack = playerChar.playerAttack+10;
+            $(".attacks").html("You attacked "+defenderChar.name+" for "+yourAttack+" damage.<br>"+defenderChar.name+" attacked you for "+defenderChar.enemyAttack+" damage.");
+            
+            // I'm going to be real, I incremented by playerAttack so I could feel like the variable was doing SOMETHING instead of just sitting uselessly.
+            yourAttack = yourAttack+playerChar.playerAttack;
         }
 
         // if you're now dead as a result of enemy attack, you are informed you have lost.
-        if(playerChar.health <= 0) {
+        if(yourHealth <= 0) {
             $(".attacks").html("You have been defeated.<br>Game Over.");
             youLive = false;
-
+            $(".reset").append(resetButton);
         }
-        else if(defenderChar.health <= 0) {
+        else if(enemyHealth <= 0) {
             $(".defender-card").remove();
             $(".attacks").html("You have defeated "+defenderChar.name+"! You may now select another enemy to fight.");
             defender = false;
@@ -274,11 +293,15 @@ $("button").click(function(){
 
     if(win==3) {
         $(".attacks").html("You have won!");
+        $(".reset").append(resetButton);
     }
 });
 
+$("#reset-button").click(function(){
+    $(".reset").empty();
+    wins = 0;
+    createCharacter();
+});
+
 // things to do now:
-// make reset button appear when you win or lose
-// make a click of reset button call the createCharacter() function
-// reset wins to 0 somewhere in createCharacter or the reset button press or something
 // get some cool fonts and a nice background. and maybe stylize the buttons a little.
