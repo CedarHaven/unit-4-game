@@ -1,17 +1,9 @@
-// I'm so tired.
-// I wrote most of this over the course of five-six hours.
-// help me.
-// moving right along:
 // this is an array of all the character objects.
-// the only reason playerAttack is in here is because the instructions said every character should have a separate enemy attack, player attack, and health variable. at least, I assume they meant "separate variables", because otherwise that instruction would be in direct conflict with the instruction of "it shouldn't be about picking the strongest character", because....different player attack variables...inherently means....there is a strongest character...who is more likely to win.
-// basically, if they meant "all the characters should have different player attack numbers", then I recognize I was given a direction, but given that it's a stupid direction, I have elected to ignore it. /approximate movie quotes yay.
-// I swear I can be more professional in my comments.
-// but holy fuck I'm so tired right now.
-// I wouldn't do it if I was handing this right to potential employers or something.
+// they have a name, health, base player attack, image path, and enemy attack. enemies with higher attack power start with higher base attack power as player characters, because that makes logical sense to me. but all enemies still start with higher attack power than a player. always.
 var characters = [ 
     {name: "Hawkeye",
     health: 350,
-    playerAttack: 12,
+    playerAttack: 10,
     imgPath: "assets/images/hawkeye.jpg",
     enemyAttack: 22},
 
@@ -29,7 +21,7 @@ var characters = [
 
     {name: "Iron Man",
     health: 390,
-    playerAttack: 12,
+    playerAttack: 14,
     imgPath: "assets/images/iron-man.jpg",
     enemyAttack: 35}
 ]
@@ -46,7 +38,7 @@ var defenderChar = {};
 var win = 0;
 var defender = false;
 var youLive = true;
-var yourAttack = 12;
+var yourAttack = 0;
 var yourHealth = 0;
 var enemyHealth = 0;
 var resetButton = $("<button/>", {
@@ -56,7 +48,7 @@ var resetButton = $("<button/>", {
         $("#reset").empty();
         $("#player-character").empty();
         win = 0;
-        yourAttack = 12;
+        yourAttack = 0;
         yourHealth = 0;
         enemyHealth = 0;
         enemyChars = [];
@@ -157,6 +149,7 @@ $("#character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourAttack = playerChar.playerAttack;
         yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
@@ -173,6 +166,7 @@ $("#character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourAttack = playerChar.playerAttack;
         yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
@@ -189,6 +183,7 @@ $("#character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourAttack = playerChar.playerAttack;
         yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
@@ -205,6 +200,7 @@ $("#character-selection").on("click", ".char-card", function(e) {
             }
         }
 
+        yourAttack = playerChar.playerAttack;
         yourHealth = playerChar.health;
         appendPlayer();
         appendEnemy();
