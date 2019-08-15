@@ -1,6 +1,7 @@
 // I'm so tired.
 // I wrote most of this over the course of five-six hours.
 // help me.
+// moving right along:
 // this is an array of all the character objects.
 // the only reason playerAttack is in here is because the instructions said every character should have a separate enemy attack, player attack, and health variable. at least, I assume they meant "separate variables", because otherwise that instruction would be in direct conflict with the instruction of "it shouldn't be about picking the strongest character", because....different player attack variables...inherently means....there is a strongest character...who is more likely to win.
 // basically, if they meant "all the characters should have different player attack numbers", then I recognize I was given a direction, but given that it's a stupid direction, I have elected to ignore it. /approximate movie quotes yay.
