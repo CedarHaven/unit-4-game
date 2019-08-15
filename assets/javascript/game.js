@@ -54,8 +54,8 @@ var resetButton = $("<button/>", {
     text: "Reset",
     id: "reset-button",
     click:function() {
-        $(".reset").empty();
-        $(".player-character").empty();
+        $("#reset").empty();
+        $("#player-character").empty();
         win = 0;
         yourAttack = 12;
         yourHealth = 0;
