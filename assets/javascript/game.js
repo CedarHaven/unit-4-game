@@ -8,7 +8,6 @@
 // I swear I can be more professional in my comments.
 // but holy fuck I'm so tired right now.
 // I wouldn't do it if I was handing this right to potential employers or something.
-// I realized very belatedly that my Captain America image is from Endgame, and that he doesn't normally have a hammer, but I am beyond caring.
 var characters = [ 
     {name: "Hawkeye",
     health: 350,
