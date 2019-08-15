@@ -39,7 +39,7 @@ var characters = [
 // I also included a tracker of how many battles you've won in a playthrough, and when it hits 3, you win the game and are told you've won.
 // defender is to check if you've already picked an enemy to fight, so that you can't keep picking enemies over and over, and also so you can't attack while there's no active enemy.
 // youLive is to check if you're still alive, so that you can't attack after you die and lose the game.
-// yourAttack, yourHealth, and enemyHealth exist to make my life easier so that I don't have to reset like eight object variables every time the restart button is used. yourAttack is default set to 10 because that's what the base player attack is.
+// yourAttack, yourHealth, and enemyHealth exist to make my life easier so that I don't have to reset like eight object variables every time the restart button is used. yourAttack is default set to 12 because that's what the base player attack is.
 // then there's the reset button, so that I'm not making it twice for when you win or lose. on a click, the button goes away, variables that need resetting are reset, and createCharacter is called anew.
 var enemyChars = [];
 var playerChar = {};
@@ -57,7 +57,7 @@ var resetButton = $("<button/>", {
         $(".reset").empty();
         $(".player-character").empty();
         win = 0;
-        yourAttack = 10;
+        yourAttack = 12;
         yourHealth = 0;
         enemyHealth = 0;
         enemyChars = [];
