@@ -312,11 +312,5 @@ $("#attack-button").click(function(){
     }
 });
 
-$("#reset-button").click(function(){
-    $("#reset").empty();
-    wins = 0;
-    createCharacter();
-});
-
 // things to do now:
 // get some cool fonts and a nice background. and maybe stylize the buttons a little.
