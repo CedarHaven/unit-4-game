@@ -14,7 +14,7 @@ var characters = [
     health: 350,
     playerAttack: 12,
     imgPath: "assets/images/hawkeye.jpg",
-    enemyAttack: 30},
+    enemyAttack: 25},
 
     {name: "Black Widow",
     health: 370,
@@ -26,13 +26,13 @@ var characters = [
     health: 410,
     playerAttack: 12,
     imgPath: "assets/images/cap.jpg",
-    enemyAttack: 35},
+    enemyAttack: 30},
 
     {name: "Iron Man",
     health: 390,
     playerAttack: 12,
     imgPath: "assets/images/iron-man.jpg",
-    enemyAttack: 40}
+    enemyAttack: 35}
 ]
 
 // here is the array for the enemy characters, the object for the player character, and the object for the defender character.
