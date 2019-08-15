@@ -20,7 +20,7 @@ img{
     background-color: gray;
 }
 
-.player-card{
+#player-card{
     max-width: 300px;
     text-align: center;
     display: inline-block;
@@ -28,7 +28,7 @@ img{
     background-color: white;
 }
 
-.defender-card{
+#defender-card{
     max-width: 300px;
     text-align: center;
     display: inline-block;
