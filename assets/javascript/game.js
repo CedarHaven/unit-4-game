@@ -1,5 +1,6 @@
 // this is an array of all the character objects.
 // they have a name, health, base player attack, image path, and enemy attack. enemies with higher attack power start with higher base attack power as player characters, because that makes logical sense to me. but all enemies still start with higher attack power than a player. always.
+// Hawkeye and Black Widow have the lowest enemy attack power, and as long as you start with one of them, you shouldn't have too much difficulty winning, even if you use Hawkeye.
 var characters = [ 
     {name: "Hawkeye",
     health: 350,
