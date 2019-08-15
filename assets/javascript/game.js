@@ -13,13 +13,13 @@ var characters = [
     health: 350,
     playerAttack: 12,
     imgPath: "assets/images/hawkeye.jpg",
-    enemyAttack: 25},
+    enemyAttack: 22},
 
     {name: "Black Widow",
     health: 370,
     playerAttack: 12,
     imgPath: "assets/images/black-widow.jpg",
-    enemyAttack: 20},
+    enemyAttack: 27},
 
     {name: "Captain America",
     health: 410,
