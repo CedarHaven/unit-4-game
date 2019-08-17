@@ -1,1 +1,3 @@
-# unit-4-game
+# Unit-4-Game
+
+A fighting game in which you play as one of your choice of four of the Avengers (Black Widow, Hawkeye, Captain America, or Iron Man) and then fight the remaining three enemies with your character. Each character has a different health (displayed underneath their picture on their card), a different power level for attacking as a player character, and a different power level for attacking as the enemy. Each time you attack an enemy, your attack power increases by the base attack power. After you either win or lose, a reset button appears so you can play again.
