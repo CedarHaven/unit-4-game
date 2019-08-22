@@ -47,12 +47,16 @@ var resetButton = $("<button/>", {
     id: "reset-button",
     click:function() {
         $("#reset").empty();
+        $("#attacks").empty();
+        $("#current-enemy").empty();
         $("#player-character").empty();
         win = 0;
         yourAttack = 0;
         yourHealth = 0;
         enemyHealth = 0;
         enemyChars = [];
+        defender = false;
+        youLive = true;
         createCharacter();
     }
 });
