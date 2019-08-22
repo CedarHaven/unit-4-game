@@ -4,7 +4,7 @@
 var characters = [ 
     {name: "Hawkeye",
     health: 350,
-    playerAttack: 10,
+    playerAttack: 15,
     imgPath: "assets/images/hawkeye.jpg",
     enemyAttack: 22},
 
@@ -132,7 +132,7 @@ function playerHealthUpdate() {
     $("#player-health").text(yourHealth);
 }
 
-$("#character-selection").on("click", ".char-card", function(e) {
+$("#character-selection").on("click", ".char-card", function() {
     
     // this goes looking for the customized data-name attribute of what you clicked on.
     var charSelect = $(this).attr("data-name");
