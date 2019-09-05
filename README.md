@@ -5,7 +5,7 @@ A fighting game in which you play as one of your choice of four of the Avengers 
 ## Installation
 
 You can use Git Bash to clone the repository onto your computer by entering the following in Git Bash:
-```git clone https://github.com/CedarHaven/unit-4-game.git```
+```git clone https://github.com/juniperhaven/unit-4-game.git```
 After doing so, open the folder you've downloaded, right click 'index.html' and open in your browser of choice.
 
-Alternately, the project is hosted on Git Pages at https://cedarhaven.github.io/unit-4-game/
+Alternately, the project is hosted on Git Pages at https://juniperhaven.github.io/unit-4-game/
