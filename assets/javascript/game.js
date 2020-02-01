@@ -44,21 +44,7 @@ var yourHealth = 0;
 var enemyHealth = 0;
 var resetButton = $("<button/>", {
     text: "Reset",
-    id: "reset-button",
-    click:function() {
-        $("#reset").empty();
-        $("#attacks").empty();
-        $("#current-enemy").empty();
-        $("#player-character").empty();
-        win = 0;
-        yourAttack = 0;
-        yourHealth = 0;
-        enemyHealth = 0;
-        enemyChars = [];
-        defender = false;
-        youLive = true;
-        createCharacter();
-    }
+    id: "reset-button"
 });
 
 createCharacter();
@@ -296,6 +282,20 @@ $("#attack-button").click(function(){
             $("#attacks").html("You have been defeated.<br>Game Over.");
             youLive = false;
             $("#reset").append(resetButton);
+            $("reset-button").on("click", function() {
+                $("#reset").empty();
+                $("#attacks").empty();
+                $("#current-enemy").empty();
+                $("#player-character").empty();
+                win = 0;
+                yourAttack = 0;
+                yourHealth = 0;
+                enemyHealth = 0;
+                enemyChars = [];
+                defender = false;
+                youLive = true;
+                createCharacter();
+            })
         }
         else if(enemyHealth <= 0) {
             $("#defender-card").remove();
@@ -309,6 +309,20 @@ $("#attack-button").click(function(){
     if(win==3) {
         $("#attacks").html("You have won!");
         $("#reset").append(resetButton);
+        $("reset-button").on("click", function() {
+            $("#reset").empty();
+            $("#attacks").empty();
+            $("#current-enemy").empty();
+            $("#player-character").empty();
+            win = 0;
+            yourAttack = 0;
+            yourHealth = 0;
+            enemyHealth = 0;
+            enemyChars = [];
+            defender = false;
+            youLive = true;
+            createCharacter();
+        })
     }
 });
 
